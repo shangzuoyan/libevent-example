@@ -56,7 +56,7 @@ void event_callback(struct bufferevent *bev, short events, void *ctx)
         }
         close(fd);
         bufferevent_free(bev);
-    } else if ((conn->mode = SOCKET_MODE_CLIENT) && (events & BEV_EVENT_CONNECTED)) {
+    } else if ((conn->mode == SOCKET_MODE_CLIENT) && (events & BEV_EVENT_CONNECTED)) {
         /* We're connected to 127.0.0.1:8080.
          * Ordinarily we'd do something here, like start reading or writing. */
         if (conn->cb.on_connect) {
