@@ -1,5 +1,4 @@
-CC = gcc
-
+CC 		?= gcc
 SOURCES ?= $(wildcard src/*.c)
 OBJS    ?= $(addprefix , $(SOURCES:.c=.o))
 
@@ -7,16 +6,18 @@ CFLAGS += -W -Wall
 CFLAGS += -O3 -g -fno-omit-frame-pointer
 CFLAGS += -fno-strict-aliasing
 CFLAGS += -I. -Iinclude/
+CFLAGS += $(shell pkg-config --cflags libevent)
 
 LDFLAGS += -levent -lpthread
+LDFLAGS += $(shell pkg-config --libs libevent)
 
 TARGET := socket
 
-all: $(TARGET)
+all: build
 
-$(TARGET): $(OBJS)
+build: $(OBJS)
 	@echo "[BIN] $@"
-	@$(CC) $^ $(LDFLAGS) -o $@
+	@$(CC) $^ $(LDFLAGS) -o $(TARGET)
 
 $(OBJS): %.o: %.c
 	@echo "[CC] $<"

@@ -11,7 +11,7 @@ int thread_start(thread_t *tc,
     pthread_t *thread;
     pthread_attr_t *attr;
 
-    if (!tc || !routine) {
+    if (tc == NULL || routine == NULL) {
         return -1;
     }
     thread = &tc->thread;

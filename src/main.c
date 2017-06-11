@@ -8,6 +8,8 @@
 #include "socket.h"
 #include "utils.h"
 
+const char *endpoint = "tcp://127.0.0.1:20000";
+
 void client_connect_cb(int fd)
 {
     const char message[] = "ping";
@@ -70,10 +72,10 @@ void * server_thread_cb(void *arg)
         .on_read = &server_on_read_cb,
     };
 
-	UNUSED_ARG(arg);
+    UNUSED_ARG(arg);
 
     while(1) {
-        int ret = socket_bind(&server, "tcp://*:20000", &server_cb);
+        int ret = socket_bind(&server, endpoint, &server_cb);
         if (ret < 0) {
             fprintf(stderr, "socket listen error\n");
             goto on_exit;
@@ -93,9 +95,9 @@ int main(void)
 
     ret  = thread_start(&thread, THREAD_DETACHED,
                         (thread_routine_t *)server_thread_cb, NULL);
-	if (ret < 0) {
-		return -1;
-	}
+    if (ret < 0) {
+        return -1;
+    }
 
     // client connection
     socket_t client;
@@ -106,8 +108,9 @@ int main(void)
     };
     sleep(1);
 
+	fprintf(stderr, "try to connect on endpoint: %s\n", endpoint);
     /** client connection */
-    if (socket_connect(&client, "tcp://127.0.0.1:20000", &client_cb) < 0) {
+    if (socket_connect(&client, endpoint, &client_cb) < 0) {
         return -1;
     }
     // close client connection

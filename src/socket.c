@@ -160,14 +160,14 @@ int socket_bind(socket_t *conn, const char *endpoint, socket_callback_t *cb)
 
     case EVT_TYPE_TCP:
         conn->sin.sin_family = AF_INET;
-        conn->sin.sin_addr.s_addr = 0;
+        conn->sin.sin_addr.s_addr = INADDR_ANY;
         conn->sin.sin_port = htons(conn->data.port);
         conn->listener = socket(AF_INET, SOCK_STREAM, 0);
 
         /** set sockaddr and length to bind */
         addr = (struct sockaddr *)&conn->sin;
         length = sizeof(conn->sun);
-        break;
+		break;
     }
 
     evutil_make_socket_nonblocking(conn->listener);
@@ -203,7 +203,7 @@ int socket_bind(socket_t *conn, const char *endpoint, socket_callback_t *cb)
 
 int socket_close(socket_t *conn)
 {
-    if(!conn) {
+    if(conn == NULL) {
         return -1;
     }
     if (conn->mode == SOCKET_MODE_SERVER) {

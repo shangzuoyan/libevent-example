@@ -3,6 +3,12 @@
 
 #include <limits.h>
 
+#if __APPLE__
+#ifndef HOST_NAME_MAX
+#define HOST_NAME_MAX 255
+#endif
+#endif
+
 /**
  *  IPC:
  *  Assign the pathname "/tmp/feeds/0"
