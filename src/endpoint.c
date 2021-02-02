@@ -15,7 +15,7 @@ int get_endpoint(evt_data_t * data, const char *endpoint)
     const char *pstx, *petx;
     int length;
 
-    if (!data || !endpoint || !strlen(endpoint)) {
+    if (data == NULL || endpoint == NULL || strlen(endpoint) == 0) {
         return -1;
     }
 
@@ -33,7 +33,7 @@ int get_endpoint(evt_data_t * data, const char *endpoint)
 
                 switch(data->type) {
                 case EVT_TYPE_IPC:
-                    if (strlen(pstx)) {
+                    if (strlen(pstx) != 0) {
                         strncpy(data->host, pstx, sizeof(data->host));
                         return 0;
                     }
